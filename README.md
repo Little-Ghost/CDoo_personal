@@ -1,2 +1,1 @@
-# Colin Doo
-## C. Doo's repository
+# Colin Doo's personal repository
