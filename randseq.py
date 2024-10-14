@@ -1,11 +1,19 @@
 import argparse
 import random
 
+<<<<<<< HEAD
 __version__ = "1.10"
+=======
+__version__ = "1.12"
+>>>>>>> ffffb83 (Random sequence generator for Bash command line.)
 
 
 help_message = f"""\033[1m\033[7mRandseq {__version__}\033[0m: 
 A random biological sequence (DNA, RNA or protein) generator.
+<<<<<<< HEAD
+=======
+Designed for command-line usage.
+>>>>>>> ffffb83 (Random sequence generator for Bash command line.)
 
 Author     : CDoo
 Last update: 2024-10-07
