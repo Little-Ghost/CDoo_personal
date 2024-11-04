@@ -68,6 +68,13 @@ class _TableInput:
         self.root.bind("<Up>", self.move_up)
         self.root.bind("<Down>", self.move_down)
         self.root.bind("<Escape>", self.close_without_input)
+        self.root.bind("<Control-w>", self.close_without_input)
+        self.root.bind("<Insert>", self.paste_from_clipboard)
+        self.root.bind("<Control-v>", self.paste_from_clipboard)
+        self.root.bind("<Control-d>", self.clear_table)
+        self.root.bind("<Control-x>", self.cut_from_table)
+        self.root.bind("<Control-x>", self.copy_from_table)
+
 
         self.root.attributes('-topmost', True)
         self.root.after(0, self.get_focus)
@@ -121,6 +128,42 @@ class _TableInput:
     def close_without_input(self, event=None):
         self.root.destroy()
         raise SystemExit
+
+    def paste_from_clipboard(self, event=None):
+        text = self.root.clipboard_get()
+        lines = [line.strip("╭ ╮│╰╯()").split() for line in text.split('\n')]
+        for row, line in zip(self.entry_widgets, lines):
+            for entry, num in zip(row, line):
+                entry.insert(0, num)
+        x11 = self.entry_widgets[0][0].get().replace(text, '')
+        self.entry_widgets[0][0].delete(0, tk.END)
+        self.entry_widgets[0][0].insert(0, x11)
+
+    def clear_table(self, event=None):
+        for row in self.entry_widgets:
+            for entry in row:
+                entry.delete(0, tk.END)
+
+    def cut_from_table(self, event=None):
+        table = []
+        for row in self.entry_widgets:
+            a = []
+            for entry in row:
+                if (num := entry.get()):
+                    a.append(self.dtype(num))
+                    entry.delete(0, tk.END)
+            if a:
+                table.append(a)
+        self.root.clipboard_append(str(table))
+
+    def copy_from_table(self, event=None):
+        table = []
+        for row in self.entry_widgets:
+            a = []
+            for entry in row:
+                if (num := entry.get()): a.append(self.dtype(num))
+            if a: table.append(a)
+        self.root.clipboard_append(str(table))
 
     def run(self):
         self.root.mainloop()
@@ -629,7 +672,10 @@ class matrix(tuple):
         row: Optional[Sequence[int]] ;col: Optional[Sequence[int]]
         if rns is None: rns = [self.rn]
         if cns is None: cns = [self.cn]
-        assert sum(rns) == self.rn and sum(cns) == self.cn
+        if (sr := sum(rns)) < self.rn:
+            rns.append(self.rn - sr)
+        if (sc := sum(cns)) < self.cn:
+            cns.append(self.cn - sc)
         row, col = tuple(accumulate(rns))[:-1], tuple(accumulate(cns))[:-1]
         return self.partition_by_index(row, col)
 
@@ -895,3 +941,9 @@ class matrixList(list):
 
 def E(order=3):
     return matrix(*chunked(((1,) + (0,) * order) * (order - 1) + (1,), order))
+
+
+def rand(rn=3, cn=None, d=False):
+    cn = rn if cn is None else cn
+    rand = random if d else partial(randint, 0, 9)
+    return matrix(tuple(rand() for i in range(cn)) for i in range(rn))
