@@ -261,18 +261,9 @@ a₁₁*a₂₂ - a₁₂*a₂₁
 
 矩阵的乘法在四则运算中比较特殊，有多种不同的定义方式。其中最基础的类型包括：
 
-- **标准乘法/内积/点积**：即
-
-![\Large {\mathbf C}={\mathbf A}{\mathbf B} =(\sum_k{a_{ik}·b_{kj}})_{ij}](https://latex.codecogs.com/svg.latex?\Large&space;{\mathbf C}={\mathbf A}{\mathbf B} =(\sum_k{a_{ik}·b_{kj}})_{ij}) 
-
-- **数乘**：矩阵与一个数之间的乘积，即
-
-![\Large x{\mathbf A}=(xa_{ij})_{ij}](https://latex.codecogs.com/svg.latex?\Large&space;x{\mathbf A}=(xa_{ij})_{ij})
-
-- **Hadamard积**（数学符号是ʘ）：即同型矩阵的对应位置的元两两相乘，即
-
-![\Large {\mathbf A}\odot{\mathbf B}=(a_{ij}b_{ij})_{ij}](https://latex.codecogs.com/svg.latex?\Large&space;{\mathbf A}\odot{\mathbf B}=(a_{ij}b_{ij})_{ij}) 
-
+- **标准乘法/内积/点积**：即$`{\mathbf C}={\mathbf A}{\mathbf B} =(\sum_k{a_{ik}·b_{kj}})_{ij}`$
+- **数乘**：矩阵与一个数之间的乘积，即$`x{\mathbf A}=(xa_{ij})_{ij}`$
+- **Hadamard积**（数学符号是ʘ）：即同型矩阵的对应位置的元两两相乘，即$`{\mathbf A}\odot{\mathbf B}=(a_{ij}b_{ij})_{ij}`$
 
 本包利用python中的运算符“*”实现内积、数乘和Hadamard积。
 
@@ -280,7 +271,9 @@ a₁₁*a₂₂ - a₁₂*a₂₁
 - 若前一矩阵列数与后一矩阵行数相等，执行标准乘法；
 - 若两矩阵同型，则执行Hadamard积。
 
-读者可能会注意到如果矩阵为方阵，则标准乘法和Hadamard积是有冲突的，“*”运算符将优先执行矩阵标准乘法。对于方阵的Hadamard积，建议使用字面方法（`mtr.hadamard`）。
+显然，如果矩阵为方阵，则标准乘法和Hadamard积是有冲突的，“*”运算符将优先执行矩阵标准乘法。
+
+对于方阵的Hadamard积，建议使用字面方法（`mtr.hadamard`）。
 
 ```python
 >>> a, b = rand(5), rand(5) # randomly generate some integer matrices
@@ -311,8 +304,9 @@ a₁₁*a₂₂ - a₁₂*a₂₁
 
 实际上是把两矩阵的每个元都两两组合，然后在对应位置乘积。一个n×m矩阵与一个p×q矩阵的张量积就是一个np×mq矩阵：
 
-![\Large {\mathbf A}\otimes {\mathbf B}=(a_{ij}{\mathbf B})_{ij}=\left( \begin{array}{cc} a_{11}{\mathbf B} & \cdots & a_{1m}{\mathbf B} \\ \vdots & \ddots & \vdots \\ a_{n1}{\mathbf B}  & \cdots & a_{nm}{\mathbf B} \end{array} \right)=\left( \begin{array}{cc} a_{11}b_{11} &\cdots & a_{11}b_{1p}& \cdots & a_{1m}b_{1p} \\ \vdots & \ddots & \vdots & \ddots & \vdots \\ a_{11}b_{q1}  & \cdots & a_{11}b_{qp} & \cdots & a_{1m}b_{qp} \\ \vdots & \ddots & \vdots & \ddots & \vdots \\ a_{n1}b_{q1} & \cdots & a_{n1}b_{q1} & \cdots & a_{nm}b_{qp} \end{array} \right)](https://latex.codecogs.com/svg.latex?\Large&space;{\mathbf A}\otimes {\mathbf B}=(a_{ij}{\mathbf B})_{ij}=\left( \begin{array}{cc} a_{11}{\mathbf B} & \cdots & a_{1m}{\mathbf B} \\ \vdots & \ddots & \vdots \\ a_{n1}{\mathbf B}  & \cdots & a_{nm}{\mathbf B} \end{array} \right)=\left( \begin{array}{cc} a_{11}b_{11} &\cdots & a_{11}b_{1p}& \cdots & a_{1m}b_{1p} \\ \vdots & \ddots & \vdots & \ddots & \vdots \\ a_{11}b_{q1}  & \cdots & a_{11}b_{qp} & \cdots & a_{1m}b_{qp} \\ \vdots & \ddots & \vdots & \ddots & \vdots \\ a_{n1}b_{q1} & \cdots & a_{n1}b_{q1} & \cdots & a_{nm}b_{qp} \end{array} \right)) 
-
+```math
+{\mathbf A}\otimes {\mathbf B}=(a_{ij}{\mathbf B})_{ij}=\left( \begin{array}{cc} a_{11}{\mathbf B} & \cdots & a_{1m}{\mathbf B} \\ \vdots & \ddots & \vdots \\ a_{n1}{\mathbf B}  & \cdots & a_{nm}{\mathbf B} \end{array} \right)=\left( \begin{array}{cc} a_{11}b_{11} &\cdots & a_{11}b_{1p}& \cdots & a_{1m}b_{1p} \\ \vdots & \ddots & \vdots & \ddots & \vdots \\ a_{11}b_{q1}  & \cdots & a_{11}b_{qp} & \cdots & a_{1m}b_{qp} \\ \vdots & \ddots & \vdots & \ddots & \vdots \\ a_{n1}b_{q1} & \cdots & a_{n1}b_{q1} & \cdots & a_{nm}b_{qp} \end{array} \right)
+```
 
 运算符`@`或字面方法`mtr.kronecker`是Kronecker积的实现。这里援引维基百科中的例子：
 
@@ -330,7 +324,9 @@ a₁₁*a₂₂ - a₁₂*a₂₁
 
 定义为：
 
-![\Large {\mathbf A}\ast{\mathbf B}=({\mathbf A}_{ij}\otimes{\mathbf B}_{ij})_{ij}](https://latex.codecogs.com/svg.latex?\Large&space;{\mathbf A}\ast{\mathbf B}=({\mathbf A}_{ij}\otimes{\mathbf B}_{ij})_{ij}) 
+```math
+{\mathbf A}\ast{\mathbf B}=({\mathbf A}_{ij}\otimes{\mathbf B}_{ij})_{ij}
+```
 
 这是一种不完全的张量积，即先对矩阵分块，再在对应的块之间作张量积。分块方式可以任意，但两矩阵的行块数和列块数都必须相同。
 
@@ -358,7 +354,9 @@ a₁₁*a₂₂ - a₁₂*a₂₁
 
 定义为：
 
-![\Large {\mathbf A}\circ{\mathbf B}=(({\mathbf A}_{ij}\otimes{\mathbf B}_{kl})_{kl})_{ij}](https://latex.codecogs.com/svg.latex?\Large&space;{\mathbf A}\circ{\mathbf B}=(({\mathbf A}_{ij}\otimes{\mathbf B}_{kl})_{kl})_{ij}) 
+```math
+{\mathbf A}\circ{\mathbf B}=(({\mathbf A}_{ij}\otimes{\mathbf B}_{kl})_{kl})_{ij}
+```
 
 两矩阵的分块方式都任意。其运算方式为：先分块，作关于块的张量积，然后对于张量积中每两个块的组合，再作关于元的张量积。
 
@@ -384,7 +382,9 @@ a₁₁*a₂₂ - a₁₂*a₂₁
 
 实际上是关于行向量的张量积。其定义为：
 
-![\Large {\mathbf A}\bullet{\mathbf B}=({\mathbf A}_{i\cdot}\otimes{\mathbf B}_{i\cdot})_{i\cdot}](https://latex.codecogs.com/svg.latex?\Large&space;{\mathbf A}\bullet{\mathbf B}=({\mathbf A}_{i\cdot}\otimes{\mathbf B}_{i\cdot})_{i\cdot}) 
+```math
+{\mathbf A}\bullet{\mathbf B}=({\mathbf A}_{i\cdot}\otimes{\mathbf B}_{i\cdot})_{i\cdot}
+```
 
 字面方法`mtr.slyusar`或`mtr.face_splitting`是面分割积的实现。
 
@@ -399,7 +399,9 @@ a₁₁*a₂₂ - a₁₂*a₂₁
 
 实际上是关于列向量的张量积。似乎也被称为一种Khatri-Rao积（至少如果你调用R的`Matrix`包中的`KhatriRao`，则其实际执行的就是该积）。其定义为：
 
-![\Large {\mathbf A}\diamond{\mathbf B}=({\mathbf A}_{\cdot j}\otimes{\mathbf B}_{\cdot j})_{\cdot j}](https://latex.codecogs.com/svg.latex?\Large&space;{\mathbf A}\diamond{\mathbf B}=({\mathbf A}_{\cdot j}\otimes{\mathbf B}_{\cdot j})_{\cdot j}) 
+```math
+{\mathbf A}\diamond{\mathbf B}=({\mathbf A}_{\cdot j}\otimes{\mathbf B}_{\cdot j})_{\cdot j}
+```
 
 本包中字面方法`mtr.kronecker_col`是列式张量积的实现。
 
@@ -439,17 +441,17 @@ a₁₁*a₂₂ - a₁₂*a₂₁
 
 上文提到的一些基础运算中，快速运算（能够在1秒内完成）的矩阵阶数$N$的上限分别为：
 
-- **算术运算和转置**：计算复杂度为O(N^2)，2000 - 5000阶（400万 - 2500万个元）。（在极高的阶数下，生成一个矩阵都需要一定的时间。）
-- **乘法、行列式和逆矩阵**：O(N^3)，200-500阶（4万 - 25万个元）。本包中，行列式和逆矩阵均用Gauss-Jordan消元法（即使用线性变换将矩阵还原为上三角阵，乃至单位阵）编写。
+- **算术运算和转置**：计算复杂度为$`O(N^2)`$，2000 - 5000阶（400万 - 2500万个元）。（在极高的阶数下，生成一个矩阵都需要一定的时间。）
+- **乘法、行列式和逆矩阵**：$`O(N^3)`$，200-500阶（4万 - 25万个元）。本包中，行列式和逆矩阵均用Gauss-Jordan消元法（即使用线性变换将矩阵还原为上三角阵，乃至单位阵）编写。
 
 在本包的子包`methods`（尚未发布）中即将包括的算法有：
 
-- 矩阵乘法的**Strassen算法**，该算法理论上的复杂度为O(N^2.81)，然而由于种种原因，其速度反而低于使用python丰富的生成器类实现的标准乘法。
+- 矩阵乘法的**Strassen算法**，该算法理论上的复杂度为$`O(N^2.81)`$，然而由于种种原因，其速度反而低于使用python丰富的生成器类实现的标准乘法。
 - **Strassen算法的Winograd变体**。计算量稍有减少，但复杂度与Strassen算法相同。
-- 矩阵乘法的**Coppersmith-Winograd算法**，理论上可将复杂度降低到O(N^2.37)。然而实际操作上可能达不到那么快的速度。
-- 行列式的**Laplace展开法**，即将行列式展开为余子式，其计算复杂度为O(N!)，4阶矩阵以内快于消元法；超过10阶就会花费很长时间。对于一个100阶矩阵，需要作10^157次计算，会导致内存溢出，对于高阶矩阵，极其不推荐使用。（就算一台计算机有逆天的存储能力，面对这样大的计算量，算到宇宙毁灭也算不完！）
-- 行列式的**LU分解法**，复杂度仍为O(N^3)。
-- **逆矩阵的标准定义**：其计算复杂度是O(N^5)，阶数上限为20-50阶左右。
+- 矩阵乘法的**Coppersmith-Winograd算法**，理论上可将复杂度降低到$`O(N^2.37)`$。然而实际操作上可能达不到那么快的速度。
+- 行列式的**Laplace展开法**，即将行列式展开为余子式，其计算复杂度为$`O(N!)`$，4阶矩阵以内快于消元法；超过10阶就会花费很长时间。对于一个100阶矩阵，需要作10^157次计算，会导致内存溢出，对于高阶矩阵，极其不推荐使用。（就算一台计算机有逆天的存储能力，面对这样大的计算量，算到宇宙毁灭也算不完！）
+- 行列式的**LU分解法**，复杂度仍为$`O(N^3)`$。
+- **逆矩阵的标准定义**：其计算复杂度是$`O(N^5)`$，阶数上限为20-50阶左右。
 
 （本包正在计划用C, Numpy或者Cython进行提速，如有需要，请关注未来的更新版本。）
 
